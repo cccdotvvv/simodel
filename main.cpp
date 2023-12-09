@@ -1,5 +1,10 @@
 #include <iostream>
+#include <armadillo>
 
-int main(int, char**){
-    std::cout << "Hello, from simodel!\n";
+using namespace arma;
+
+int main(){
+    mat A = randu<mat>(5, 5)*10;
+    A.print("A = \n");
+    cout<<"A的第（2，3）个元素为："<<A(1,2)<<endl;
 }
