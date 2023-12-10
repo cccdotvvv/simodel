@@ -8,23 +8,27 @@
 
 typedef arma::mat mat;
 typedef std::map<int, mat> unitIO;
-typedef std::map<std::string, mat> unitState;
+typedef std::map<std::string, mat> keyMatMap;
 
 namespace simodel
 {
     class UnitBase
     {
     private:
-        std::string unitType;
         struct OdeInfo
         {
             bool hasODE;
             mat yPrime;
             mat solution;    
         }odeInfo;
+        
+    protected:
+        std::string unitType;
         unitIO inputs;
         unitIO outputs;
-        unitState states;
+        keyMatMap states;
+        keyMatMap parameters;
+
     public:
         UnitBase();
         ~UnitBase();
@@ -39,9 +43,9 @@ namespace simodel
         inline mat getInput(const int& inputPortID);
         inline mat getOutput(const int& outputPortID);
         inline mat getState(const std::string& stateName);
-        inline mat setInput(const int& inputPortID, const mat& inputValue);
-        inline mat setOutput(const int& inputPortID, const mat& outputValue);
-        inline mat setState(const std::string& stateName, const mat& stateValue);
+        inline void setInput(const int& inputPortID, const mat& inputValue);
+        inline void setOutput(const int& inputPortID, const mat& outputValue);
+        inline void setState(const std::string& stateName, const mat& stateValue);
     };
     
     UnitBase::UnitBase()
@@ -99,17 +103,17 @@ namespace simodel
     {
         return states.at(stateName);
     }
-    inline mat UnitBase::setInput(const int &inputPortID, const mat &inputValue)
+    inline void UnitBase::setInput(const int &inputPortID, const mat &inputValue)
     {
-        return inputs.at(inputPortID) = inputValue;
+        inputs.at(inputPortID) = inputValue;
     }
-    inline mat UnitBase::setOutput(const int &inputPortID, const mat &outputValue)
+    inline void UnitBase::setOutput(const int &inputPortID, const mat &outputValue)
     {
-        return outputs.at(inputPortID) = outputValue;
+        outputs.at(inputPortID) = outputValue;
     }
-    inline mat UnitBase::setState(const std::string &stateName, const mat &stateValue)
+    inline void UnitBase::setState(const std::string &stateName, const mat &stateValue)
     {
-        return states.at(stateName) = stateValue;
+        states.at(stateName) = stateValue;
     }
 }
 
