@@ -7,18 +7,23 @@
 
 namespace simodel
 {
-    struct ioInfo
+    struct unitInstance
     {
-        std::vector<int> inportInfo;
-        std::vector<int> outportInfo;
+        std::shared_ptr<UnitBase> unit;
+        std::map<int, int> inport;
+        std::map<int, int> outport;
+        
+        unitInstance(const std::shared_ptr<UnitBase>& unitIns)
+        {
+            unit = unitIns;
+        }
     };
 
     class Simodel
     {
     private:
         int maxUnitID;
-        std::unordered_map<int, std::shared_ptr<UnitBase>> units;
-        std::map<int, ioInfo> calcInfo;
+        std::unordered_map<int, unitInstance> units;
 
     public:
         Simodel();

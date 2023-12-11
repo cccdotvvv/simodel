@@ -9,7 +9,7 @@ namespace simodel
 
     void Simodel::addUnit(const std::shared_ptr<UnitBase>& newUnit)
     {
-        units.emplace(maxUnitID, newUnit);
+        units.emplace(maxUnitID, unitInstance(newUnit));
         maxUnitID += 1;
     }
 
