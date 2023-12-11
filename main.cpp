@@ -1,14 +1,29 @@
 #include <iostream>
-#include <armadillo>
+#include "typedefine.h"
+#include "Const.h"
+#include <memory>
+#include "Simodel.h"
 
 using namespace arma;
 
 int main(){
-    mat A = randu<mat>(5, 5)*10;
-    A.print("A = \n");
-    cout<<"A的第（2，3）个元素为："<<A(1,2)<<endl;
+    auto const1 = std::make_shared<simodel::Const>();
+    const1->update();
+    const1->getOutput(0).print();
 
-    mat B(1,1);
-    B = 1;
-    B.print();
+    auto const2 = std::make_shared<simodel::Const>();
+    const2->update();
+    const2->getOutput(0).print();
+
+    auto const3 = std::make_shared<simodel::Const>();
+    const3->update();
+    const3->getOutput(0).print();
+
+    auto sm = std::make_shared<simodel::Simodel>();
+    sm->addUnit(const1);
+    sm->addUnit(const2);
+    sm->addUnit(const3);
+
+    sm->deleteUnit(2);
+    sm->deleteUnit(1);
 }

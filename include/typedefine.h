@@ -5,6 +5,7 @@
 #include<string>
 #include<map>
 #include<vector>
+#include<memory>
 
 typedef arma::mat mat;
 typedef std::map<int, mat> unitIO;
@@ -12,26 +13,24 @@ typedef std::map<std::string, mat> keyMatMap;
 
 namespace simodel
 {
+    //计算单元基类
     class UnitBase
-    {
-    private:
-        struct OdeInfo
-        {
-            bool hasODE;
-            mat yPrime;
-            mat solution;    
-        }odeInfo;
-        
+    {   
     protected:
         std::string unitType;
         unitIO inputs;
         unitIO outputs;
         keyMatMap states;
         keyMatMap parameters;
-
+        struct
+        {
+            bool hasODE;
+            mat yPrime;
+            mat solution;    
+        }odeInfo;
     public:
-        UnitBase();
-        ~UnitBase();
+        inline UnitBase();
+        inline ~UnitBase();
         virtual void update()=0;
         inline bool isNeedSolver() const;
         inline mat getYPrime() const;

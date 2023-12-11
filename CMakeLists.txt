@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.20.0)
+cmake_minimum_required(VERSION 3.26.0)
 project(simodel)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_executable(simodel main.cpp)
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+add_executable(simodel main.cpp ${SOURCES})
