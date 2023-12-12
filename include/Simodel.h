@@ -1,35 +1,33 @@
 #ifndef SIMODEL_SIMODEL_H
 #define SIMODEL_SIMODEL_H
 
-#include <map>
-#include <vector>
 #include "typedefine.h"
+#include <map>
+#include <memory>
 
-namespace simodel
-{
-    struct unitInstance
-    {
-        std::shared_ptr<UnitBase> unit;
-        std::map<int, int> inport;
-        std::map<int, int> outport;
-        
-        unitInstance(const std::shared_ptr<UnitBase>& unitIns)
-        {
-            unit = unitIns;
-        }
-    };
+namespace simodel {
+struct unitInstance {
+  std::shared_ptr<UnitBase> unit;
+  std::map<int, std::pair<int, int>> inPort;
+  std::map<int, std::pair<int, int>> outPort;
 
-    class Simodel
-    {
-    private:
-        int maxUnitID;
-        std::unordered_map<int, unitInstance> units;
+  explicit unitInstance(const std::shared_ptr<UnitBase> &unitIns) {
+    unit = unitIns;
+  }
+};
 
-    public:
-        Simodel();
-        void addUnit(const std::shared_ptr<UnitBase>& newUnit);
-        void deleteUnit(const int& unitID);
-    };
-}
+class Simodel {
+private:
+  int maxUnitID;
+  std::unordered_map<int, unitInstance> units;
+
+public:
+  Simodel();
+  void addUnit(const std::shared_ptr<UnitBase> &newUnit);
+  void deleteUnit(const int &unitID);
+  void connectUnit(const std::pair<int, int> &outPort,
+                   const std::pair<int, int> &inPort);
+};
+} // namespace simodel
 
 #endif
