@@ -1,9 +1,10 @@
 #ifndef SIMODEL_SIMODEL_H
 #define SIMODEL_SIMODEL_H
 
-#include "typedefine.h"
 #include <map>
 #include <memory>
+
+#include "typedefine.h"
 
 namespace simodel {
 struct unitInstance {
@@ -17,17 +18,17 @@ struct unitInstance {
 };
 
 class Simodel {
-private:
+ private:
   int maxUnitID;
   std::unordered_map<int, unitInstance> units;
 
-public:
+ public:
   Simodel();
   void addUnit(const std::shared_ptr<UnitBase> &newUnit);
   void deleteUnit(const int &unitID);
   void connectUnit(const std::pair<int, int> &outPort,
                    const std::pair<int, int> &inPort);
 };
-} // namespace simodel
+}  // namespace simodel
 
 #endif

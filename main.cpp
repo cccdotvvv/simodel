@@ -1,7 +1,8 @@
+#include <memory>
+
 #include "Const.h"
 #include "Simodel.h"
 #include "typedefine.h"
-#include <memory>
 
 using namespace arma;
 

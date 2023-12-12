@@ -12,7 +12,7 @@ typedef std::map<std::string, mat> keyMatMap;
 namespace simodel {
 // 计算单元基类
 class UnitBase {
-protected:
+ protected:
   std::string unitType;
   unitIO inputs;
   unitIO outputs;
@@ -24,7 +24,7 @@ protected:
     mat solution;
   } odeInfo;
 
-public:
+ public:
   inline UnitBase();
   inline ~UnitBase();
   virtual void update() = 0;
@@ -83,6 +83,6 @@ inline void UnitBase::setState(const std::string &stateName,
                                const mat &stateValue) {
   states.at(stateName) = stateValue;
 }
-} // namespace simodel
+}  // namespace simodel
 
 #endif

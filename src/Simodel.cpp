@@ -30,4 +30,4 @@ void Simodel::connectUnit(const std::pair<int, int> &outPort,
     it2->second.inPort.emplace(inPort.second, outPort);
   }
 }
-} // namespace simodel
+}  // namespace simodel

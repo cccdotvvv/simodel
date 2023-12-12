@@ -1,4 +1,5 @@
 #include "Const.h"
+
 #include "typedefine.h"
 
 simodel::Const::Const() {
