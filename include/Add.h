@@ -4,7 +4,12 @@
 #include "typedefine.h"
 
 namespace simodel {
-class Add : public UnitBase {};
+class Add : public UnitBase {
+ public:
+  Add();
+  void update() override;
+  void updateFromPara() override;
+};
 }  // namespace simodel
 
 #endif

@@ -7,7 +7,7 @@ namespace simodel {
 class Const : public UnitBase {
  public:
   Const();
-  void update();
+  void update() override;
 };
 }  // namespace simodel
 

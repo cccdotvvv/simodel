@@ -5,6 +5,7 @@ Simodel::Simodel() { maxUnitID = 0; }
 
 void Simodel::addUnit(const std::shared_ptr<UnitBase> &newUnit) {
   units.emplace(maxUnitID, unitInstance(newUnit));
+  newUnit->setUnitID(maxUnitID);
   maxUnitID += 1;
 }
 
@@ -14,6 +15,7 @@ void Simodel::deleteUnit(const int &unitID) {
     auto it = units.find(i);
     if (it != units.end()) {
       auto value = std::move(it->second);
+      value.unit->setUnitID(i - 1);
       units.erase(it);
       units.emplace(i - 1, std::move(value));
     }

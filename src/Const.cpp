@@ -6,8 +6,13 @@ simodel::Const::Const() {
   unitType = "const";
   odeInfo.hasODE = false;
   outputs[0];
-  mat constant = {1};
-  parameters["constant"] = constant;
+  mat _constant = {1};
+  parameters["constant"] = _constant;
 }
 
-void simodel::Const::update() { outputs[0] = parameters["constant"]; }
+void simodel::Const::update() {
+  auto _constant = parameters["constant"];
+  if (_constant.type() == typeid(mat)) {
+    outputs[0] = std::any_cast<mat>(_constant);
+  }
+}

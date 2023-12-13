@@ -1,23 +1,28 @@
 #ifndef SIMODEL_TYPEDIFINE_H
 #define SIMODEL_TYPEDIFINE_H
 
+#include <any>
 #include <armadillo>
 #include <map>
 #include <string>
 
 typedef arma::mat mat;
 typedef std::map<int, mat> unitIO;
+typedef std::map<std::string, std::any> keyAnyMap;
 typedef std::map<std::string, mat> keyMatMap;
 
 namespace simodel {
 // 计算单元基类
 class UnitBase {
+ private:
+  int unitID{};
+
  protected:
   std::string unitType;
   unitIO inputs;
   unitIO outputs;
   keyMatMap states;
-  keyMatMap parameters;
+  keyAnyMap parameters;
   struct {
     bool hasODE{};
     mat yPrime;
@@ -28,22 +33,26 @@ class UnitBase {
   inline UnitBase();
   inline ~UnitBase();
   virtual void update() = 0;
-  inline bool isNeedSolver() const;
-  inline mat getYPrime() const;
+  [[nodiscard]] inline bool isNeedSolver() const;
+  [[nodiscard]] inline mat getYPrime() const;
   inline void setYPrime(const mat &yPrime);
-  inline mat getSolution() const;
+  [[nodiscard]] inline mat getSolution() const;
   inline void setSolution(const mat &solution);
   inline void setUnitType(const std::string &typeName);
-  inline std::string getUnitType() const;
+  [[nodiscard]] inline std::string getUnitType() const;
   inline mat getInput(const int &inputPortID);
   inline mat getOutput(const int &outputPortID);
   inline mat getState(const std::string &stateName);
   inline void setInput(const int &inputPortID, const mat &inputValue);
   inline void setOutput(const int &inputPortID, const mat &outputValue);
   inline void setState(const std::string &stateName, const mat &stateValue);
+  template <typename T>
+  inline void setParameter(const std::string &parameterName, const T &value);
+  virtual inline void updateFromPara();
+  inline void setUnitID(const int &curUnitID);
 };
 
-UnitBase::UnitBase() {}
+UnitBase::UnitBase() = default;
 
 UnitBase::~UnitBase() {}
 
@@ -82,6 +91,16 @@ inline void UnitBase::setOutput(const int &inputPortID,
 inline void UnitBase::setState(const std::string &stateName,
                                const mat &stateValue) {
   states.at(stateName) = stateValue;
+}
+template <typename T>
+inline void UnitBase::setParameter(const std::string &parameterName,
+                                   const T &value) {
+  this->parameters[parameterName] = value;
+  updateFromPara();
+}
+inline void UnitBase::updateFromPara(){};
+inline void UnitBase::setUnitID(const int &curUnitID) {
+  this->unitID = curUnitID;
 }
 }  // namespace simodel
 
