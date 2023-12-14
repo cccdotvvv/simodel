@@ -1,6 +1,7 @@
 #include "Simodel.h"
 
 namespace simodel {
+
 Simodel::Simodel() { maxUnitID = 0; }
 
 void Simodel::addUnit(const std::shared_ptr<UnitBase> &newUnit) {
@@ -32,4 +33,38 @@ void Simodel::connectUnit(const std::pair<int, int> &outPort,
     it2->second.inPort.emplace(inPort.second, outPort);
   }
 }
+
+void Simodel::calculateExecutionOrder() {
+  while (executionOrder.size() < units.size()) {
+    for (const auto &_unit : units) {
+      if (std::find(executionOrder.begin(), executionOrder.end(),
+                    _unit.first) != executionOrder.end()) {
+        continue;
+      }
+      auto _depends = _unit.second.getDpendsUnitIDs();
+      bool isAllDpendsOK = false;
+      for (const auto &_depend : _depends) {
+        isAllDpendsOK = std::find(executionOrder.begin(), executionOrder.end(),
+                                  _depend) != executionOrder.end();
+      }
+      if (_depends.empty() || isAllDpendsOK) {
+        executionOrder.push_back(_unit.first);
+      }
+    }
+  }
+}
+
+void Simodel::doStep() {
+  this->calculateExecutionOrder();
+  for (const auto &_unitID : executionOrder) {
+    auto curUnit = units[_unitID];
+    for (const auto &_port : curUnit.inPort) {
+      curUnit.unit->setInput(
+          _port.first,
+          units[_port.second.first].unit->getOutput(_port.second.second));
+    }
+    curUnit.unit->update();
+  }
+}
+
 }  // namespace simodel

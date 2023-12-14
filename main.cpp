@@ -24,17 +24,12 @@ int main() {
   sm->addUnit(const1);
   sm->addUnit(const2);
   sm->addUnit(const3);
-  sm->connectUnit(std::make_pair(0, 1), std::make_pair(3, 0));
-  sm->connectUnit(std::make_pair(1, 1), std::make_pair(3, 1));
-  sm->connectUnit(std::make_pair(2, 1), std::make_pair(3, 2));
+  sm->addUnit(add);
+  sm->connectUnit(std::make_pair(0, 0), std::make_pair(3, 0));
+  sm->connectUnit(std::make_pair(1, 0), std::make_pair(3, 1));
+  sm->connectUnit(std::make_pair(2, 0), std::make_pair(3, 2));
 
-  const1->update();
-  const2->update();
-  const3->update();
-  add->setInput(0, const1->getOutput(0));
-  add->setInput(1, const2->getOutput(0));
-  add->setInput(2, const3->getOutput(0));
-  add->update();
+  sm->doStep();
 
   add->getOutput(0).print();
 }
