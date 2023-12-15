@@ -42,6 +42,7 @@ class Simodel {
   std::unordered_map<int, unitInstance> units;
   std::vector<int> executionOrder;
   void calculateExecutionOrder();
+  double stepSize{};
 
  public:
   Simodel();
@@ -49,6 +50,7 @@ class Simodel {
   void deleteUnit(const int &unitID);
   void connectUnit(const std::pair<int, int> &outPort,
                    const std::pair<int, int> &inPort);
+  void setStepSize(const double &step);
   void doStep();
 };
 

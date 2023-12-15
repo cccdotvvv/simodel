@@ -16,6 +16,7 @@ namespace simodel {
 class UnitBase {
  private:
   int unitID{};
+  double t{};
 
  protected:
   std::string unitType;
@@ -50,6 +51,7 @@ class UnitBase {
   inline void setParameter(const std::string &parameterName, const T &value);
   virtual inline void updateFromPara();
   inline void setUnitID(const int &curUnitID);
+  inline void setCurrentTime(const double &currentTime);
 };
 
 UnitBase::UnitBase() = default;
@@ -102,6 +104,14 @@ inline void UnitBase::updateFromPara(){};
 inline void UnitBase::setUnitID(const int &curUnitID) {
   this->unitID = curUnitID;
 }
+
+inline void UnitBase::setCurrentTime(const double &currentTime) {
+  this->t = currentTime;
+}
+
+// 求解器基类
+class SolverBase {};
+
 }  // namespace simodel
 
 #endif
