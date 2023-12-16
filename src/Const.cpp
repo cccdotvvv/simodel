@@ -1,7 +1,5 @@
 #include "Const.h"
 
-#include "typedefine.h"
-
 simodel::Const::Const() {
   unitType = "const";
   odeInfo.hasODE = false;

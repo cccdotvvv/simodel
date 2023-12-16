@@ -1,7 +1,7 @@
 #ifndef SIMODEL_ADD_H
 #define SIMODEL_ADD_H
 
-#include "typedefine.h"
+#include "SimodelBase.h"
 
 namespace simodel {
 class Add : public UnitBase {

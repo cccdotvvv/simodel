@@ -1,7 +1,7 @@
 #ifndef SIMODEL_CONST_H
 #define SIMODEL_CONST_H
 
-#include "typedefine.h"
+#include "SimodelBase.h"
 
 namespace simodel {
 class Const : public UnitBase {

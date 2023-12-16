@@ -1,7 +1,7 @@
 #ifndef SIMODEL_INTEGRATOR_H
 #define SIMODEL_INTEGRATOR_H
 
-#include "typedefine.h"
+#include "SimodelBase.h"
 
 namespace simodel {
 

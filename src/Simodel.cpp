@@ -1,4 +1,5 @@
-#include "Simodel.h"
+#include "EulerSolver.h"
+#include "SimodelBase.h"
 
 namespace simodel {
 
@@ -56,30 +57,21 @@ void Simodel::calculateExecutionOrder() {
 
 void Simodel::setStepSize(const double &step) { this->stepSize = step; }
 
+double Simodel::getStepSize() { return this->stepSize; }
+
 void Simodel::doStep() {
   this->calculateExecutionOrder();
-  for (const auto &_unitID : executionOrder) {
-    auto curUnitInstance = units[_unitID];
+  this->solver->solveOneStep(this);
+}
 
-    for (const auto &_port : curUnitInstance.inPort) {
-      curUnitInstance.unit->setInput(
-          _port.first,
-          units[_port.second.first].unit->getOutput(_port.second.second));
-    }
+std::vector<int> Simodel::getExecutionOrder() { return this->executionOrder; }
 
-    auto curUnit = curUnitInstance.unit;
-    if (curUnit->isNeedSolver()) {
-      curUnit->update();
-      double k0 = curUnit->getYPrime().at(0);
-      double h = this->stepSize;
-      double y0 = curUnit->getOutput(0).at(0);
-      double y1 = y0 + h * k0;
-      curUnit->setOutput(0, mat(1, 1, arma::fill::value(y1)));
-    } else {
-      curUnit->update();
-    }
-    curUnitInstance.unit->update();
-  }
+std::unordered_map<int, unitInstance> Simodel::getUnits() {
+  return this->units;
+}
+
+void Simodel::setSolver(const std::shared_ptr<SolverBase> &slvr) {
+  this->solver = slvr;
 }
 
 }  // namespace simodel

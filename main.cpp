@@ -3,8 +3,8 @@
 
 #include "Add.h"
 #include "Const.h"
+#include "EulerSolver.h"
 #include "Integrator.h"
-#include "Simodel.h"
 
 using namespace arma;
 
@@ -33,6 +33,7 @@ int main() {
   sm->connectUnit(std::make_pair(1, 0), std::make_pair(3, 1));
   sm->connectUnit(std::make_pair(2, 0), std::make_pair(3, 2));
   sm->connectUnit(std::make_pair(3, 0), std::make_pair(4, 0));
+  sm->setSolver(std::make_shared<simodel::EulerSolver>());
 
   double t = 0;
   double stepSize = 0.1;

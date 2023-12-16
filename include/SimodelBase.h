@@ -4,7 +4,10 @@
 #include <any>
 #include <armadillo>
 #include <map>
+#include <memory>
 #include <string>
+
+// #include "Simodel.h"
 
 typedef arma::mat mat;
 typedef std::map<int, mat> unitIO;
@@ -12,11 +15,18 @@ typedef std::map<std::string, std::any> keyAnyMap;
 typedef std::map<std::string, mat> keyMatMap;
 
 namespace simodel {
-// 计算单元基类
+struct UnitMemento {
+  keyMatMap states;
+  unitIO inputs;
+  unitIO outputs;
+};
+
+/*----------------------计算单元基类定义开始----------------------*/
 class UnitBase {
  private:
   int unitID{};
   double t{};
+  std::unordered_map<std::string, UnitMemento> mementors;
 
  protected:
   std::string unitType;
@@ -52,6 +62,8 @@ class UnitBase {
   virtual inline void updateFromPara();
   inline void setUnitID(const int &curUnitID);
   inline void setCurrentTime(const double &currentTime);
+  inline void saveMementor(const std::string &name);
+  inline void restoreFromMementor(const std::string &name);
 };
 
 UnitBase::UnitBase() = default;
@@ -109,8 +121,79 @@ inline void UnitBase::setCurrentTime(const double &currentTime) {
   this->t = currentTime;
 }
 
-// 求解器基类
-class SolverBase {};
+inline void UnitBase::saveMementor(const std::string &name) {
+  this->mementors[name].inputs = this->inputs;
+  this->mementors[name].states = this->states;
+  this->mementors[name].outputs = this->outputs;
+}
+
+inline void UnitBase::restoreFromMementor(const std::string &name) {
+  this->inputs = this->mementors[name].inputs;
+  this->states = this->mementors[name].states;
+  this->outputs = this->mementors[name].outputs;
+}
+/*----------------------计算单元基类定义结束----------------------*/
+
+struct unitInstance {
+  std::shared_ptr<UnitBase> unit;
+  std::map<int, std::pair<int, int>> inPort;
+  std::map<int, std::pair<int, int>> outPort;
+
+  unitInstance() = default;
+  explicit unitInstance(const std::shared_ptr<UnitBase> &unitIns) {
+    unit = unitIns;
+  }
+
+  [[nodiscard]] std::vector<int> getDpendsUnitIDs() const {
+    std::vector<int> res;
+    res.reserve(this->inPort.size());
+    for (const auto &_port : this->inPort) {
+      res.push_back(_port.second.first);
+    }
+    return res;
+  }
+  [[nodiscard]] std::vector<int> getNextUnitIDs() const {
+    std::vector<int> res;
+    res.reserve(this->outPort.size());
+    for (const auto &_port : this->outPort) {
+      res.push_back(_port.second.first);
+    }
+    return res;
+  }
+};
+
+/*----------------------模型类的定义开始----------------------*/
+class SolverBase;
+class Simodel {
+ private:
+  int maxUnitID;
+  std::unordered_map<int, unitInstance> units;
+  std::vector<int> executionOrder;
+  void calculateExecutionOrder();
+  double stepSize{};
+  std::shared_ptr<SolverBase> solver;
+
+ public:
+  Simodel();
+  void addUnit(const std::shared_ptr<UnitBase> &newUnit);
+  void deleteUnit(const int &unitID);
+  void connectUnit(const std::pair<int, int> &outPort,
+                   const std::pair<int, int> &inPort);
+  void setStepSize(const double &step);
+  double getStepSize();
+  void doStep();
+  std::vector<int> getExecutionOrder();
+  std::unordered_map<int, unitInstance> getUnits();
+  void setSolver(const std::shared_ptr<SolverBase> &slvr);
+};
+/*----------------------模型类的定义结束----------------------*/
+
+/*----------------------求解器基类的定义开始----------------------*/
+class SolverBase {
+ public:
+  virtual void solveOneStep(Simodel *model) = 0;
+};
+/*----------------------求解器基类的定义结束----------------------*/
 
 }  // namespace simodel
 
