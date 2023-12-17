@@ -21,7 +21,7 @@ void EulerSolver::solveOneStep(Simodel *model) {
       double y1 = y0 + h * k0;
       curUnit->setOutput(0, mat(1, 1, arma::fill::value(y1)));
     }
-    curUnitInstance.unit->update();
+    curUnit->update();
   }
 }
 
