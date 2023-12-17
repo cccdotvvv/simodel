@@ -19,7 +19,7 @@ void EulerSolver::solveOneStep(Simodel *model) {
       double h = model->getStepSize();
       double y0 = curUnit->getOutput(0).at(0);
       double y1 = y0 + h * k0;
-      curUnit->setOutput(0, mat(1, 1, arma::fill::value(y1)));
+      curUnit->setSolution(mat(1, 1, arma::fill::value(y1)));
     }
     curUnit->update();
   }
