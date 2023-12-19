@@ -44,6 +44,7 @@ class UnitBase {
   inline UnitBase();
   inline ~UnitBase();
   virtual void update() = 0;
+  virtual inline void odeCalculator();
   [[nodiscard]] inline bool isNeedSolver() const;
   [[nodiscard]] inline mat getYPrime() const;
   inline void setYPrime(const mat &yPrime);
@@ -69,6 +70,8 @@ class UnitBase {
 UnitBase::UnitBase() = default;
 
 UnitBase::~UnitBase() {}
+
+inline void UnitBase::odeCalculator() {}
 
 bool UnitBase::isNeedSolver() const { return odeInfo.hasODE; }
 
@@ -170,7 +173,6 @@ class Simodel {
   std::unordered_map<int, unitInstance> units;
   std::vector<int> executionOrder;
   void calculateExecutionOrder();
-  double stepSize{};
   std::shared_ptr<SolverBase> solver;
 
  public:
@@ -179,8 +181,6 @@ class Simodel {
   void deleteUnit(const int &unitID);
   void connectUnit(const std::pair<int, int> &outPort,
                    const std::pair<int, int> &inPort);
-  void setStepSize(const double &step);
-  double getStepSize();
   void doStep();
   std::vector<int> getExecutionOrder();
   std::unordered_map<int, unitInstance> getUnits();
@@ -188,9 +188,22 @@ class Simodel {
 };
 /*----------------------模型类的定义结束----------------------*/
 
+struct SolverOption {
+  double h;
+  double tInit;
+  double tFinal;
+  double hMax;
+  double hMin;
+  double tol;
+};
+
 /*----------------------求解器基类的定义开始----------------------*/
 class SolverBase {
+ protected:
+  SolverOption option{};
+
  public:
+  explicit SolverBase(SolverOption option) { this->option = option; };
   virtual void solveOneStep(Simodel *model) = 0;
 };
 /*----------------------求解器基类的定义结束----------------------*/

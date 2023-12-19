@@ -1,4 +1,3 @@
-#include "EulerSolver.h"
 #include "SimodelBase.h"
 
 namespace simodel {
@@ -54,10 +53,6 @@ void Simodel::calculateExecutionOrder() {
     }
   }
 }
-
-void Simodel::setStepSize(const double &step) { this->stepSize = step; }
-
-double Simodel::getStepSize() { return this->stepSize; }
 
 void Simodel::doStep() {
   this->calculateExecutionOrder();

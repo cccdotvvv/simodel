@@ -5,6 +5,7 @@
 #include "Const.h"
 #include "EulerSolver.h"
 #include "Integrator.h"
+#include "SimodelBase.h"
 
 using namespace arma;
 
@@ -33,12 +34,14 @@ int main() {
   sm->connectUnit(std::make_pair(1, 0), std::make_pair(3, 1));
   sm->connectUnit(std::make_pair(2, 0), std::make_pair(3, 2));
   sm->connectUnit(std::make_pair(3, 0), std::make_pair(4, 0));
-  sm->setSolver(std::make_shared<simodel::EulerSolver>());
+
+  simodel::SolverOption option{};
+  option.h = 0.1;
+  sm->setSolver(std::make_shared<simodel::EulerSolver>(option));
 
   double t = 0;
   double stepSize = 0.1;
   double stopTime = 10;
-  sm->setStepSize(stepSize);
   while (t < 10) {
     std::cout << t << "\t";
     integrator->getOutput(0).print();

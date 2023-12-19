@@ -9,6 +9,7 @@ class Integrator : public UnitBase {
  public:
   Integrator();
   void update() override;
+  void odeCalculator() override;
   void updateFromPara() override;
 };
 
