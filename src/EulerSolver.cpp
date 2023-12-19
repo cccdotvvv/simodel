@@ -17,6 +17,7 @@ void EulerSolver::solveOneStep(Simodel *model) {
           units[_port.second.first].unit->getOutput(_port.second.second));
     }
     auto curUnit = curUnitInstance.unit;
+    curUnit->update();
     if (curUnit->isNeedSolver()) {
       curUnit->odeCalculator();
       auto k0 = curUnit->getYPrime();
@@ -25,7 +26,6 @@ void EulerSolver::solveOneStep(Simodel *model) {
       auto y1 = y0 + h * k0;
       curUnit->setSolution(y1);
     }
-    curUnit->update();
   }
 }
 

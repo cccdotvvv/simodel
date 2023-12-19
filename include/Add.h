@@ -8,7 +8,7 @@ class Add : public UnitBase {
  public:
   Add();
   void update() override;
-  void updateFromPara() override;
+  void initFromPara() override;
 };
 }  // namespace simodel
 

@@ -54,6 +54,19 @@ void Simodel::calculateExecutionOrder() {
   }
 }
 
+void Simodel::findOdeUnitIDsAndSaveIt() {
+  for (const auto &_ : units) {
+    if (_.second.unit->isNeedSolver()) {
+      odeUnitIDs.emplace_back(_.first);
+    }
+  }
+}
+
+void Simodel::preparedToRun() {
+  calculateExecutionOrder();
+  findOdeUnitIDsAndSaveIt();
+}
+
 void Simodel::doStep() {
   this->calculateExecutionOrder();
   this->solver->solveOneStep(this);

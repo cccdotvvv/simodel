@@ -15,8 +15,8 @@ void Integrator::update() { this->outputs[0] = this->odeInfo.solution; }
 
 void Integrator::odeCalculator() { this->odeInfo.yPrime = this->inputs[0]; }
 
-void Integrator::updateFromPara() {
-  this->outputs[0] = std::any_cast<mat>(this->parameters["init"]);
+void Integrator::initFromPara() {
+  this->odeInfo.solution = std::any_cast<mat>(this->parameters["init"]);
 }
 
 }  // namespace simodel

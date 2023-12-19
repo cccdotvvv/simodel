@@ -60,7 +60,7 @@ class UnitBase {
   inline void setState(const std::string &stateName, const mat &stateValue);
   template <typename T>
   inline void setParameter(const std::string &parameterName, const T &value);
-  virtual inline void updateFromPara();
+  virtual inline void initFromPara();
   inline void setUnitID(const int &curUnitID);
   inline void setCurrentTime(const double &currentTime);
   inline void saveMementor(const std::string &name);
@@ -113,9 +113,9 @@ template <typename T>
 inline void UnitBase::setParameter(const std::string &parameterName,
                                    const T &value) {
   this->parameters[parameterName] = value;
-  updateFromPara();
+    initFromPara();
 }
-inline void UnitBase::updateFromPara(){};
+inline void UnitBase::initFromPara(){};
 inline void UnitBase::setUnitID(const int &curUnitID) {
   this->unitID = curUnitID;
 }
@@ -172,8 +172,10 @@ class Simodel {
   int maxUnitID;
   std::unordered_map<int, unitInstance> units;
   std::vector<int> executionOrder;
-  void calculateExecutionOrder();
+  std::vector<int> odeUnitIDs;
   std::shared_ptr<SolverBase> solver;
+  void calculateExecutionOrder();
+  void findOdeUnitIDsAndSaveIt();
 
  public:
   Simodel();
@@ -181,6 +183,7 @@ class Simodel {
   void deleteUnit(const int &unitID);
   void connectUnit(const std::pair<int, int> &outPort,
                    const std::pair<int, int> &inPort);
+  void preparedToRun();
   void doStep();
   std::vector<int> getExecutionOrder();
   std::unordered_map<int, unitInstance> getUnits();

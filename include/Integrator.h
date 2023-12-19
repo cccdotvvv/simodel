@@ -10,7 +10,7 @@ class Integrator : public UnitBase {
   Integrator();
   void update() override;
   void odeCalculator() override;
-  void updateFromPara() override;
+  void initFromPara() override;
 };
 
 }  // namespace simodel

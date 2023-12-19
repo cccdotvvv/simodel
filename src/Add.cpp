@@ -27,7 +27,7 @@ void Add::update() {
   outputs[0] = res;
 }
 
-void Add::updateFromPara() {
+void Add::initFromPara() {
   auto operators = std::any_cast<std::string>(parameters["operators"]);
   for (int i = 0; i < operators.length(); ++i) {
     inputs[i];
