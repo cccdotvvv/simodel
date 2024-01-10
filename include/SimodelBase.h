@@ -113,7 +113,7 @@ template <typename T>
 inline void UnitBase::setParameter(const std::string &parameterName,
                                    const T &value) {
   this->parameters[parameterName] = value;
-    initFromPara();
+  initFromPara();
 }
 inline void UnitBase::initFromPara(){};
 inline void UnitBase::setUnitID(const int &curUnitID) {
@@ -207,7 +207,7 @@ class SolverBase {
 
  public:
   explicit SolverBase(SolverOption option) { this->option = option; };
-  virtual void solveOneStep(Simodel *model) = 0;
+  virtual void advanceOneStep(Simodel *model) = 0;
 };
 /*----------------------求解器基类的定义结束----------------------*/
 

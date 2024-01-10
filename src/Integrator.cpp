@@ -5,6 +5,7 @@
 namespace simodel {
 
 Integrator::Integrator() {
+  this->unitType = "intergrator";
   this->odeInfo.hasODE = true;
   this->inputs[0];
   this->parameters["init"] = mat(1, 1, arma::fill::value(0));

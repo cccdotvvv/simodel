@@ -8,7 +8,7 @@ namespace simodel {
 class EulerSolver : public SolverBase {
  public:
   explicit EulerSolver(SolverOption option);
-  void solveOneStep(Simodel* model) override;
+  void advanceOneStep(Simodel* model) override;
 };
 
 }  // namespace simodel
